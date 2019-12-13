@@ -1,6 +1,6 @@
 import "./datavis-footer.component.js";
 import {POI} from  "./POI.js";
-import {initMap} from "./map.js";
+import * as map from "./map.js";
 
 //const threatURL = "https://www.autoshun.org/download/?api_key=b7b6c9f82a42625a5ece1d299f464&format=csv";
 const threatURL ="https://api.cybercure.ai/feed/get_ips"
@@ -38,7 +38,7 @@ function init(){
             },
             createPOIS(threatJson)
             {
-                //this.results = [];
+                this.ipLocation = [];
                 //Loops through the ips in the array
                 for(let i =0; i<1; i++)
                 {   
@@ -54,14 +54,15 @@ function init(){
                     .then(json => {
                         this.ipLocation.push(new POI(json.latitude, json.longitude, this.threatIPs[i]));
                         console.log(json.latitude,json.longitude);
-                        console.log(ipLocation[0]); 
+                        console.log(this.ipLocation[0].latitude); 
                     });
                 }
+                map.addMarkers(this.ipLocation);
                 
             }
         },
             created(){
-                initMap();
+                map.initMap();
             }
     });
 }
