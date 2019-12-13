@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Threat Visualizer</title>
+    <!-- development version, includes helpful console warnings -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.css' rel='stylesheet' />
+</head>
+<body>
+    <!-- Reactivity Starts here-->
+    <div id="app">
+        <h1>{{titleText}}</h1>
+
+        <section id="controls">
+            <p>{{status}}</p>
+            <p>
+                <input type ="text" placeholder="tacos" v-model="term">
+                <button @click="search">Search!</button>
+            </p>
+        </section>
+        <section id="output"></section>
+        <ul>
+            <li v-for="poi in ipLocation">{{poi.latitude}}</li>
+        </ul>
+        <data-footer></data-footer>
+    </div>
+    <!-- Reactivity Ends here-->  
+
+    <section id="mapSection">
+        <div id='mapElement' style='width: 400px; height: 300px;'></div>
+    </section>
+    <script src="./src/loader.js" type="module"></script>
+</body>
+</html>
