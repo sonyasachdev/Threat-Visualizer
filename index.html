@@ -13,6 +13,8 @@
     <script src="https://unpkg.com/@trevoreyre/autocomplete-vue"></script>
     <!--Styles-->
     <link rel="stylesheet" href="./src/css/main.css">
+    <link rel="stylesheet" href="./src/css/map.css">
+    <link rel="stylesheet" href="./src/css/table.css">
 </head>
 <body>
     <div id="mainDiv">
@@ -20,11 +22,12 @@
         <div id="app">
             <h1>{{titleText}}</h1>
             <section id="controls">
-                <p>{{status}}</p>
+                <p id="status">{{status}}</p>
                 <p>
-                    <input type ="text" placeholder="Search for a Country Here" v-model="term">
-                    <button class="button" @click="searchCountry">Search Country</button>
+                    <input type ="text" placeholder="Search for an IP Here" v-model.trim="term">
+                    <button class="button" id="ipThreatChecker" @click="checkIP">Check IP Address</button>
                 </p>
+                <p id="matchFound" :style="matchStyle">{{matchFound}}</p>
             </section>
             <section id="output"></section>
             <table id="locations">
@@ -47,7 +50,8 @@
         <section id="mapSection">
             <div id='mapElement' style='width: 600px; height: 300px;'></div>
         </section>
-        <script src="./src/js/loader.js" type="module"></script>
     </div>
+
+    <script src="./src/js/loader.js" type="module"></script>
 </body>
 </html>

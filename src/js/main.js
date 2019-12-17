@@ -13,7 +13,13 @@ function init(){
         el: '#app',
         data: {
         titleText: 'Threat Visualizer',
-        status: "Click Button to Search",
+        status: "Check if IP Address is a Threat Below",
+        matchFound: "",
+        matchColor: "",
+        matchStyle: {
+            backgroundColor: '',
+            border: ''
+        },
         term: "",
         threatIPs:[],
         ipLocation:[],
@@ -34,11 +40,44 @@ function init(){
                     this.createPOIS();
                 });
             },
-            searchCountry()
+            checkIP()
             {
-                this.status=`Showing ${this.term}...`;
+                this.status=`Status: Checking if ${this.term} is a threat`;
 
-                //console.log(countriesDB);
+                fetch(threatURL)
+                .then(response => {
+                    if(!response.ok){
+                        throw Error(`ERROR: ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(threatJson => {
+                    this.threatIPs = threatJson.data.ip;
+                    if(this.term == '')
+                    {
+                        this.status=`Please enter an IP Address to be Checked`;
+                    }
+                    else
+                    {
+                        this.status=`Checked whether [${this.term}] is a threat`;
+                        for(let i = 0; i<this.threatIPs.length; i++)
+                        {
+                            if(this.term == this.threatIPs[i])
+                            {
+                                this.matchFound = "This IP Address is a Threat";
+                                this.matchStyle.backgroundColor = "rgb(255, 0, 106)";
+                                this.matchStyle.border = "2px solid rgb(119, 0, 50)";
+                                break;
+                            }
+                            else
+                            {
+                                this.matchFound = "This IP Address is not a Threat";
+                                this.matchStyle.backgroundColor = "rgb(0, 194, 87)";
+                                this.matchStyle.border = "2px solid rgb(0, 117, 53)";
+                            }
+                        }
+                    }                    
+                });
             },
             createPOIS(threatJson)
             {
@@ -50,7 +89,6 @@ function init(){
                 {   
                     //Pulling Location data from this API
                     let url = 'http://api.ipstack.com/' + this.threatIPs[i] + '?access_key=' + access_key;
-                    // console.log(url);
                     fetch(url)
                     .then(response => {
                         if(!response.ok){

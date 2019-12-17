@@ -1,0 +1,14 @@
+#mapElement{
+    margin-left: auto;
+    margin-right: auto;
+    border: 3px solid black;
+}
+
+.marker {
+    background-image: url('mapbox-icon.png');
+    background-size: cover;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+}
