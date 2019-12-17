@@ -27,7 +27,7 @@
                 </p>
             </section>
             <section id="output"></section>
-            <table>
+            <table id="locations">
                 <thead>
                     <tr>
                       <th v-for="col in columns" v-on:click="sortTable(col)">{{col}}
@@ -45,7 +45,7 @@
         <!-- Reactivity Ends here-->  
 
         <section id="mapSection">
-            <div id='mapElement' style='width: 800px; height: 600px;'></div>
+            <div id='mapElement' style='width: 600px; height: 300px;'></div>
         </section>
         <script src="./src/js/loader.js" type="module"></script>
     </div>
