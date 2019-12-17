@@ -9,30 +9,45 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src='https://api.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.css' rel='stylesheet' />
+    <!--AutoComplete Search Bar-->
+    <script src="https://unpkg.com/@trevoreyre/autocomplete-vue"></script>
+    <!--Styles-->
+    <link rel="stylesheet" href="./src/css/main.css">
 </head>
 <body>
-    <!-- Reactivity Starts here-->
-    <div id="app">
-        <h1>{{titleText}}</h1>
+    <div id="mainDiv">
+        <!-- Reactivity Starts here-->
+        <div id="app">
+            <h1>{{titleText}}</h1>
+            <section id="controls">
+                <p>{{status}}</p>
+                <p>
+                    <input type ="text" placeholder="Search for a Country Here" v-model="term">
+                    <button class="button" @click="searchCountry">Search Country</button>
+                </p>
+            </section>
+            <section id="output"></section>
+            <table>
+                <thead>
+                    <tr>
+                      <th v-for="col in columns" v-on:click="sortTable(col)">{{col}}
+                        <div class="arrow" v-if="col==sortColumn" v-bind:class="ascending ? 'arrow_up' : 'arrow_down'"></div>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="row in rows">
+                        <td v-for="col in columns">{{row[col]}}</td>
+                    </tr>
+                  </tbody>
+            </table>
+        </div>
+        <!-- Reactivity Ends here-->  
 
-        <section id="controls">
-            <p>{{status}}</p>
-            <p>
-                <input type ="text" placeholder="tacos" v-model="term">
-                <button @click="search">Search!</button>
-            </p>
+        <section id="mapSection">
+            <div id='mapElement' style='width: 800px; height: 600px;'></div>
         </section>
-        <section id="output"></section>
-        <ul>
-            <li v-for="poi in ipLocation">{{poi.latitude}}</li>
-        </ul>
-        <data-footer></data-footer>
+        <script src="./src/js/loader.js" type="module"></script>
     </div>
-    <!-- Reactivity Ends here-->  
-
-    <section id="mapSection">
-        <div id='mapElement' style='width: 400px; height: 300px;'></div>
-    </section>
-    <script src="./src/loader.js" type="module"></script>
 </body>
 </html>
