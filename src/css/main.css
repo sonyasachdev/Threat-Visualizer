@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Alatsi&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Bungee&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Odibee+Sans&display=swap');
-@import url('https://fonts.googleapis.com/css?family=Titillium+Web&display=swap');
 
 body{
     background-color: rgb(95, 95, 95);
@@ -9,10 +8,16 @@ body{
 
 h1{
     font-family: 'Bungee', cursive;
-    color: rgb(69, 2, 107);
+    color:rgb(68, 6, 167);
     font-size: 50px;
     -webkit-text-stroke-width: 1px;
     -webkit-text-stroke-color: rgb(0, 195, 255);
+}
+
+h2{
+    font-family: 'Titillium Web', sans-serif;
+    color:white;
+    font-size: 30px;
 }
 
 .button {
@@ -32,7 +37,6 @@ h1{
     margin: auto;
     width: 50%;
     padding: 10px;
-    border: 3px solid rgb(0, 195, 255);
 }
 
 #app{
@@ -53,3 +57,16 @@ h1{
     text-align: center;
     margin: auto;
 }
+
+input[type=text], select {
+    width: 200px;
+    height: 50px;
+    font-family: 'Titillium Web', sans-serif;
+    font-size: 18px;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }

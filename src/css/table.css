@@ -1,8 +1,13 @@
+@import url('https://fonts.googleapis.com/css?family=Titillium+Web&display=swap');
+
 #locations {
     font-family: 'Titillium Web', sans-serif;
-    width: 400px;
+    width: 700px;
+    height: 200px;
+    overflow-y:scroll;
+    display:block;
     border-collapse: collapse;
-    border: 3px solid rgb(0, 195, 255) ;
+    border: 3px solid rgb(0, 195, 255);
     margin: 10px 10px 0 10px;
     table-layout: fixed;
     margin-left: auto;
@@ -18,6 +23,7 @@
     padding: 3px;
     border-bottom:2px solid rgb(0, 195, 255);
     border-right:2px solid rgb(0, 195, 255);
+
 }
 #locations th:hover {
     background: rgb(101, 28, 219); 
@@ -28,6 +34,7 @@
     border-right: 2px solid rgb(0, 195, 255);
     color: white;
     font-family: 'Titillium Web', sans-serif;
+    width:350px;
 }
 #locations tbody tr:nth-child(n) td {
     background: rgb(147, 80, 255);
@@ -49,3 +56,20 @@
     background-size: contain;
     background-position-y: bottom;
 }
+
+/* Scroll Bar */
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: rgb(0, 195, 255); 
+  }
+   
+  ::-webkit-scrollbar-thumb {
+    background: rgb(76, 7, 187); 
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(101, 28, 219); 
+  }

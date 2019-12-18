@@ -25,7 +25,6 @@ function removeAllMarkers(){
 
 function createThreatMarker(poi){
     // make a marker for each feature and add to the map
-    //console.log(poi);
     return new mapboxgl.Marker()
     .setLngLat([poi.longitude, poi.latitude])
     .addTo(map)

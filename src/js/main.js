@@ -1,12 +1,22 @@
-import {POI} from  "./POI.js";
 import * as map from "./map.js";
+import "./threat-match.component.js";
 
-//const threatURL = "https://www.autoshun.org/download/?api_key=b7b6c9f82a42625a5ece1d299f464&format=csv";
 const threatURL ="https://api.cybercure.ai/feed/get_ips"
-//const countriesDB = "./json/countries.json"
-//data.ip is an array that contains all of the threat ips
 
-let access_key = "f0ad8f096ba0a4ce3045ce3c0f838824";
+//Firebase things
+let firebaseConfig = {
+    apiKey: "AIzaSyDf9HBaeVPbIDz-35whhCkR2_GWnr4g3DI",
+    authDomain: "threat-visualizer.firebaseapp.com",
+    databaseURL: "https://threat-visualizer.firebaseio.com",
+    projectId: "threat-visualizer",
+    storageBucket: "threat-visualizer.appspot.com",
+    messagingSenderId: "967403307209",
+    appId: "1:967403307209:web:622cc5a59323f1fe9b8d18",
+    measurementId: "G-3JBWG13HKJ"
+};
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
 
 function init(){
     let app = new Vue({
@@ -18,31 +28,40 @@ function init(){
         matchColor: "",
         matchStyle: {
             backgroundColor: '',
-            border: ''
+            border: '',
+            marginBottom: '15px'
         },
-        term: "",
+        term: localStorage.getItem("searchTerm"),
         threatIPs:[],
-        ipLocation:[],
-        rows: [],
-        sortColumn: ''
+        ipSearchCount:{}
         },
         methods: {
-            showThreats(){
-                fetch(threatURL)
-                .then(response => {
-                    if(!response.ok){
-                        throw Error(`ERROR: ${response.statusText}`);
-                    }
-                    return response.json();
-                })
-                .then(threatJson => {
-                    this.threatIPs = threatJson.data.ip;
-                    this.createPOIS();
-                });
-            },
             checkIP()
             {
-                this.status=`Status: Checking if ${this.term} is a threat`;
+                this.status=`Checking if ${this.term} is a threat`;
+                
+                //Reduces the IP Address to just its numbers so that it can be used as a key.
+                let regTerm =  this.term.trim().split('.').join("");
+                let path = 'ipAddressSearchCount/' + regTerm;
+
+                let searchCount = 0;
+
+                //Keep track of how many times an IP was searched
+                firebase.database().ref("ipAddressSearchCount").on("value", 
+                function changeData(data){ 
+                    let obj = data.val();
+                    searchCount = obj[regTerm].timesSearched;
+                    searchCount++;
+                },
+                function firebaseError(error){
+                    this.status = error;
+                });
+
+                //Sets the IP Address and its search count
+                firebase.database().ref(path).set({
+                    ipAddress: this.term,
+                    timesSearched: searchCount
+                });
 
                 fetch(threatURL)
                 .then(response => {
@@ -79,73 +98,28 @@ function init(){
                     }                    
                 });
             },
-            createPOIS(threatJson)
-            {
-                //Clears array
-                this.ipLocation = [];
-
-                //Loops through the ips in the array
-                for(let i =0; i<2; i++)
-                {   
-                    //Pulling Location data from this API
-                    let url = 'http://api.ipstack.com/' + this.threatIPs[i] + '?access_key=' + access_key;
-                    fetch(url)
-                    .then(response => {
-                        if(!response.ok){
-                            throw Error(`ERROR: ${response.statusText}`);
-                        }
-                        return response.json();
-                    })
-                    .then(json => {
-                        this.ipLocation.push(new POI(json.latitude, json.longitude, this.threatIPs[i]));
-                        this.rows.push({
-                            IPAddress:this.threatIPs[i],
-                            Location: "("+ json.latitude +", "+ json.longitude +")"
-                        })
-                        // console.log(json.latitude,json.longitude);
-                        // console.log(this.ipLocation[0].latitude);
-                        //Adds Markers
-                        map.addMarkers(this.ipLocation); 
-                    });
-                }
-                
+            showYourIP(){
+                fetch('https://api.ipify.org?format=json')
+                .then(response => {
+                    if(!response.ok){
+                        throw Error(`ERROR: ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(({ ip }) => {
+                    this.term = ip;
+                });
             },
-        "sortTable": function sortTable(col) {
-            if (this.sortColumn === col) {
-                this.ascending = !this.ascending;
-            } else {
-                this.ascending = true;
-                this.sortColumn = col;
+            localStore()
+            {
+                this.term;
+                localStorage.setItem("searchTerm", this.term);
             }
-        
-            var ascending = this.ascending;
-        
-            this.rows.sort(function(a, b) {
-                if (a[col] > b[col]) {
-                return ascending ? 1 : -1
-                } else if (a[col] < b[col]) {
-                return ascending ? -1 : 1
-                }
-                return 0;
-            })
-        }        
-    },
-
-        computed:
-        {
-            "columns": function columns() {
-              if (this.rows.length == 0) {
-                return [];
-              }
-              return Object.keys(this.rows[0])
-            }
-          },
-        created(){
-            //Initalizes the Map
-            map.initMap();
-            //Initializes the Markers
-            this.showThreats();
-        }
+        },
+    created(){
+        //Initalizes the Map
+        map.initMap();
+    }
     });
 }
 

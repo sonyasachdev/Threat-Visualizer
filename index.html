@@ -9,8 +9,8 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src='https://api.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.css' rel='stylesheet' />
-    <!--AutoComplete Search Bar-->
-    <script src="https://unpkg.com/@trevoreyre/autocomplete-vue"></script>
+    <!--Getting IP APIs-->
+    <script src="http://www.geoplugin.net/javascript.gp" type="text/javascript"></script>
     <!--Styles-->
     <link rel="stylesheet" href="./src/css/main.css">
     <link rel="stylesheet" href="./src/css/map.css">
@@ -22,13 +22,24 @@
         <div id="app">
             <h1>{{titleText}}</h1>
             <section id="controls">
+                <your-ip></your-ip>
                 <p id="status">{{status}}</p>
                 <p>
-                    <input type ="text" placeholder="Search for an IP Here" v-model.trim="term">
+                    <input type ="text" placeholder="Search for an IP Here" v-model.trim="term" @change="localStore">
                     <button class="button" id="ipThreatChecker" @click="checkIP">Check IP Address</button>
+                    <button class="button" id="yourIP" @click="showYourIP">Show Your IP</button>
                 </p>
                 <p id="matchFound" :style="matchStyle">{{matchFound}}</p>
             </section>
+        </div>
+        <!-- Reactivity Ends here-->  
+
+        <section id="mapSection">
+            <div id='mapElement' style='width: 700px; height: 400px;'></div>
+        </section>
+
+        <!--Reactivity for Table Begins Here-->
+        <div id="tableVue">
             <section id="output"></section>
             <table id="locations">
                 <thead>
@@ -45,13 +56,12 @@
                   </tbody>
             </table>
         </div>
-        <!-- Reactivity Ends here-->  
-
-        <section id="mapSection">
-            <div id='mapElement' style='width: 600px; height: 300px;'></div>
-        </section>
+        <!--Reactivity for Table Ends Here-->
     </div>
 
     <script src="./src/js/loader.js" type="module"></script>
 </body>
+<script src="https://www.gstatic.com/firebasejs/7.4.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.4.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.4.0/firebase-database.js"></script>
 </html>
